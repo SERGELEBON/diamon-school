@@ -1,0 +1,559 @@
+   500→        'Business Starter Guide',
+   501→      ],
+   502→      highlight: false,
+   503→      badge: 'Best Value',
+   504→    },
+   505→  ];
+   506→
+   507→  const additionalFees = [
+   508→    { icon: FileText, label: 'Registration Form', fee: 'GHS 100', description: 'One-time non-refundable registration fee payable upon enrollment.' },
+   509→    { icon: Shirt, label: 'Complete Uniform', fee: 'GHS 800', description: 'Professional uniform set including all required attire for practical sessions.' },
+   510→  ];
+   511→
+   512→  return (
+   513→    <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-white">
+   514→      <div className="max-w-7xl mx-auto">
+   515→        <SectionTitle
+   516→          subtitle="Tuition & Fees"
+   517→          title="Invest in Your Future"
+   518→          description="Transparent pricing with no hidden costs. Choose the plan that fits your career goals and start your journey to becoming a certified beauty professional."
+   519→        />
+   520→
+   521→        {/* ─── PRICING CARDS ──────────────────────────── */}
+   522→        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+   523→          {plans.map((plan, i) => (
+   524→            <div
+   525→              key={i}
+   526→              className={`relative rounded-xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl ${
+   527→                plan.highlight
+   528→                  ? 'bg-[#0A0A0A] text-white border-2 border-[#FFD700] shadow-xl scale-[1.02]'
+   529→                  : 'bg-white text-[#0A0A0A] border border-[#888]/20 shadow-md'
+   530→              }`}
+   531→            >
+   532→              {plan.badge && (
+   533→                <div className="absolute top-0 right-0 bg-[#FFD700] text-[#0A0A0A] text-xs font-bold px-4 py-1.5 uppercase tracking-wider">
+   534→                  {plan.badge}
+   535→                </div>
+   536→              )}
+   537→              <div className="p-8">
+   538→                <div className="flex items-center gap-3 mb-2">
+   539→                  <Calendar className={`w-5 h-5 ${plan.highlight ? 'text-[#FFD700]' : 'text-[#FFD700]'}`} />
+   540→                  <span className={`text-sm uppercase tracking-widest font-semibold ${plan.highlight ? 'text-[#FFD700]' : 'text-[#FFD700]'}`}>
+   541→                    {plan.duration}
+   542→                  </span>
+   543→                </div>
+   544→                <div className="mb-4">
+   545→                  <span className={`text-5xl font-bold ${plan.highlight ? 'text-white' : 'text-[#0A0A0A]'}`} style={{ fontFamily: "'Playfair Display', serif" }}>
+   546→                    {plan.price}
+   547→                  </span>
+   548→                  <span className={`text-sm ml-1 ${plan.highlight ? 'text-white/60' : 'text-[#888]'}`}>{plan.currency}</span>
+   549→                </div>
+   550→                <p className={`text-sm leading-relaxed mb-6 ${plan.highlight ? 'text-white/60' : 'text-[#888]'}`}>
+   551→                  {plan.description}
+   552→                </p>
+   553→                <div className="h-px bg-[#FFD700]/20 mb-6" />
+   554→                <ul className="space-y-3 mb-8">
+   555→                  {plan.features.map((feature, j) => (
+   556→                    <li key={j} className="flex items-start gap-3">
+   557→                      <CheckCircle className={`w-4 h-4 mt-0.5 shrink-0 ${plan.highlight ? 'text-[#FFD700]' : 'text-[#FFD700]'}`} />
+   558→                      <span className={`text-sm ${plan.highlight ? 'text-white/80' : 'text-[#555]'}`}>{feature}</span>
+   559→                    </li>
+   560→                  ))}
+   561→                </ul>
+   562→                <button
+   563→                  onClick={() => navigateTo('contact')}
+   564→                  className={`w-full py-3.5 text-sm uppercase tracking-wider font-semibold transition-all duration-300 ${
+   565→                    plan.highlight
+   566→                      ? 'bg-[#FFD700] text-[#0A0A0A] hover:bg-[#E6C200]'
+   567→                      : 'bg-[#0A0A0A] text-white hover:bg-[#2A2A2A]'
+   568→                  }`}
+   569→                >
+   570→                  Enroll Now
+   571→                </button>
+   572→              </div>
+   573→            </div>
+   574→          ))}
+   575→        </div>
+   576→
+   577→        {/* ─── ADDITIONAL FEES ────────────────────────── */}
+   578→        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+   579→          {additionalFees.map((item, i) => (
+   580→            <div key={i} className="flex items-start gap-5 p-6 bg-[#F5F5F5] rounded-xl border border-[#888]/10 hover:border-[#FFD700]/30 transition-all">
+   581→              <div className="w-12 h-12 rounded-full bg-[#FFD700]/10 flex items-center justify-center shrink-0 border border-[#FFD700]/30">
+   582→                <item.icon className="w-5 h-5 text-[#FFD700]" />
+   583→              </div>
+   584→              <div>
+   585→                <div className="flex items-center gap-3 mb-1">
+   586→                  <h4 className="font-bold text-[#0A0A0A]" style={{ fontFamily: "'Playfair Display', serif" }}>{item.label}</h4>
+   587→                  <span className="text-[#FFD700] font-bold text-sm">{item.fee}</span>
+   588→                </div>
+   589→                <p className="text-[#888] text-sm leading-relaxed">{item.description}</p>
+   590→              </div>
+   591→            </div>
+   592→          ))}
+   593→        </div>
+   594→
+   595→        {/* ─── LOCATION & ACCOMMODATION ───────────────── */}
+   596→        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+   597→          <div className="relative overflow-hidden rounded-xl bg-[#0A0A0A] p-8 flex flex-col justify-between min-h-[260px]">
+   598→            <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFD700]/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+   599→            <div>
+   600→              <div className="flex items-center gap-3 mb-4">
+   601→                <MapPin className="w-6 h-6 text-[#FFD700]" />
+   602→                <h3 className="text-xl font-bold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>Our Location</h3>
+   603→              </div>
+   604→              <p className="text-white/60 text-sm leading-relaxed mb-2">
+   605→                Diamond Secret Beauty School is conveniently located in <span className="text-[#FFD700] font-semibold">Lapaz, Accra</span> — a vibrant and easily accessible area with excellent transport links, making it simple for students from all across the city to attend classes daily.
+   606→              </p>
+   607→            </div>
+   608→            <div className="flex items-center gap-2 mt-4">
+   609→              <Phone className="w-4 h-4 text-[#FFD700]" />
+   610→              <a href="tel:+233209461260" className="text-[#FFD700] text-sm hover:underline">+233 20 946 1260</a>
+   611→              <span className="text-white/30 mx-2">|</span>
+   612→              <Mail className="w-4 h-4 text-[#FFD700]" />
+   613→              <span className="text-[#FFD700] text-sm">info@diamondsecretbeauty.com</span>
+   614→            </div>
+   615→          </div>
+   616→
+   617→          <div className="relative overflow-hidden rounded-xl bg-[#0A0A0A] p-8 flex flex-col justify-between min-h-[260px]">
+   618→            <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#FFD700]/5 rounded-full translate-y-1/2 -translate-x-1/2" />
+   619→            <div>
+   620→              <div className="flex items-center gap-3 mb-4">
+   621→                <HomeIcon className="w-6 h-6 text-[#FFD700]" />
+   622→                <h3 className="text-xl font-bold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>Hostel Accommodation</h3>
+   623→              </div>
+   624→              <p className="text-white/60 text-sm leading-relaxed mb-2">
+   625→                For students traveling from outside Accra, we offer <span className="text-[#FFD700] font-semibold">comfortable hostel accommodation</span> at an affordable fee. Our hostel provides a safe, convenient, and supportive living environment so you can focus fully on your training without the stress of daily commuting.
+   626→              </p>
+   627→            </div>
+   628→            <div className="flex items-center gap-2 mt-4">
+   629→              <BadgeCheck className="w-4 h-4 text-[#FFD700]" />
+   630→              <span className="text-white/50 text-sm">Safe & Secure Environment</span>
+   631→              <span className="text-white/30 mx-2">|</span>
+   632→              <BadgeCheck className="w-4 h-4 text-[#FFD700]" />
+   633→              <span className="text-white/50 text-sm">Affordable Rates</span>
+   634→            </div>
+   635→          </div>
+   636→        </div>
+   637→
+   638→      </div>
+   639→    </section>
+   640→  );
+   641→}
+   642→
+   643→// ─── CTA BANNER ─────────────────────────────────────────
+   644→function CTABanner({ navigateTo }: { navigateTo: (p: Page) => void }) {
+   645→  return (
+   646→    <section className="relative py-20 overflow-hidden">
+   647→      <div className="absolute inset-0 bg-[#FFD700]" />
+   648→      <div className="absolute inset-0 bg-[url('/images/about-salon.jpg')] bg-cover bg-center opacity-10" />
+   649→      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+   650→        <Sparkles className="w-10 h-10 text-[#0A0A0A] mx-auto mb-6" />
+   651→        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#0A0A0A] mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>Your Beauty Career Awaits</h2>
+   652→        <p className="text-[#0A0A0A]/70 text-lg max-w-2xl mx-auto mb-8">Join hundreds of successful graduates who have transformed their passion into a thriving career.</p>
+   653→        <div className="flex flex-wrap justify-center gap-4">
+   654→          <button onClick={() => navigateTo('contact')} className="bg-[#0A0A0A] text-white font-semibold px-8 py-3 text-sm uppercase tracking-wider hover:bg-[#2A2A2A] transition-all">Enroll Now</button>
+   655→          <button onClick={() => document.getElementById('formations')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[#0A0A0A]/10 text-[#0A0A0A] font-semibold px-8 py-3 text-sm uppercase tracking-wider border border-[#0A0A0A]/20 hover:bg-[#0A0A0A]/20 transition-all">View Programs</button>
+   656→        </div>
+   657→      </div>
+   658→    </section>
+   659→  );
+   660→}
+   661→
+   662→// ─── HOW TO REGISTER ────────────────────────────────────
+   663→function HowToRegisterSection({ navigateTo }: { navigateTo: (p: Page) => void }) {
+   664→  const steps = [
+   665→    { icon: UserCheck, title: 'Choose Your Program', desc: 'Browse our range of professional beauty formations and select the program that aligns with your career goals.' },
+   666→    { icon: FileText, title: 'Submit Your Application', desc: 'Complete our simple online registration form. No prior experience required for beginner programs.' },
+   667→    { icon: CreditCard, title: 'Secure Your Spot', desc: 'Choose from our flexible payment plans to secure your enrollment with installment options.' },
+   668→    { icon: GraduationCap, title: 'Start Your Journey', desc: 'Begin your transformation with hands-on training from industry experts and graduate with certification.' },
+   669→  ];
+   670→  return (
+   671→    <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-[#0A0A0A]">
+   672→      <div className="max-w-7xl mx-auto">
+   673→        <SectionTitle subtitle="Enrollment" title="How to Register" description="Getting started at Diamond Secret Beauty School is simple. Follow these four easy steps to begin your beauty career journey." light />
+   674→        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+   675→          {steps.map((step, i) => (
+   676→            <div key={i} className="text-center p-6 bg-[#1A1A1A] rounded-lg border border-white/5 hover:border-[#FFD700]/20 transition-all hover:-translate-y-1">
+   677→              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#FFD700]/10 flex items-center justify-center border border-[#FFD700]/30">
+   678→                <step.icon className="w-7 h-7 text-[#FFD700]" />
+   679→              </div>
+   680→              <div className="text-[#FFD700] text-4xl font-bold mb-4 opacity-20" style={{ fontFamily: "'Playfair Display', serif" }}>0{i + 1}</div>
+   681→              <h3 className="text-lg font-bold text-white mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>{step.title}</h3>
+   682→              <p className="text-white/50 text-sm leading-relaxed">{step.desc}</p>
+   683→            </div>
+   684→          ))}
+   685→        </div>
+   686→        <div className="text-center mt-12">
+   687→          <button onClick={() => navigateTo('contact')} className="bg-[#FFD700] text-[#0A0A0A] font-semibold px-8 py-3 text-sm uppercase tracking-wider hover:bg-[#E6C200] transition-all inline-flex items-center gap-2">
+   688→            Start Your Registration <ArrowRight className="w-4 h-4" />
+   689→          </button>
+   690→        </div>
+   691→      </div>
+   692→    </section>
+   693→  );
+   694→}
+   695→
+   696→// ─── TESTIMONIALS ───────────────────────────────────────
+   697→function TestimonialsSection() {
+   698→  return (
+   699→    <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-[#F5F5F5]">
+   700→      <div className="max-w-7xl mx-auto">
+   701→        <SectionTitle subtitle="Testimonials" title="What Our Students Say" description="Hear from our graduates who have transformed their passion into successful careers in the beauty industry." />
+   702→        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+   703→          {testimonials.map((t) => (
+   704→            <div key={t.id} className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow relative">
+   705→              <Quote className="w-10 h-10 text-[#FFD700]/20 absolute top-6 right-6" />
+   706→              <div className="flex items-center gap-4 mb-6">
+   707→                <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#FFD700]">
+   708→                  <img src={t.image} alt={t.name} className="w-full h-full object-cover" />
+   709→                </div>
+   710→                <div>
+   711→                  <h4 className="font-bold text-[#0A0A0A]" style={{ fontFamily: "'Playfair Display', serif" }}>{t.name}</h4>
+   712→                  <p className="text-[#FFD700] text-xs uppercase tracking-wider">{t.role}</p>
+   713→                </div>
+   714→              </div>
+   715→              <p className="text-[#888] text-sm leading-relaxed mb-4">{t.text}</p>
+   716→              <div className="flex gap-1">{Array.from({ length: 5 }).map((_, i) => <span key={i} className="text-[#FFD700] text-sm">★</span>)}</div>
+   717→            </div>
+   718→          ))}
+   719→        </div>
+   720→      </div>
+   721→    </section>
+   722→  );
+   723→}
+   724→
+   725→// ─── PARTNERS ───────────────────────────────────────────
+   726→function PartnersSection() {
+   727→  const partners = [
+   728→    { id: 1, name: 'MAC Cosmetics', logo: '💄 MAC' },
+   729→    { id: 2, name: "L'Oréal Professionnel", logo: "✨ L'Oréal" },
+   730→    { id: 3, name: 'OPI Nail Products', logo: '💅 OPI' },
+   731→    { id: 4, name: 'Wella Hair Care', logo: '💇 Wella' },
+   732→    { id: 5, name: 'Dermalogica Skincare', logo: '🧖 Dermalogica' },
+   733→    { id: 6, name: 'Sephora Pro', logo: '🌟 Sephora' },
+   734→    { id: 7, name: 'Schwarzkopf Professional', logo: '✂️ Schwarzkopf' },
+   735→    { id: 8, name: 'CND Nail Systems', logo: '💎 CND' },
+   736→  ];
+   737→  const doubled = [...partners, ...partners];
+   738→  return (
+   739→    <section className="py-12 bg-[#0A0A0A] overflow-hidden">
+   740→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center">
+   741→        <div className="flex items-center justify-center gap-3 mb-4">
+   742→          <div className="h-px w-8 bg-[#FFD700]" />
+   743→          <span className="text-[#FFD700] text-xs uppercase tracking-[0.3em] font-semibold">Partners</span>
+   744→          <div className="h-px w-8 bg-[#FFD700]" />
+   745→        </div>
+   746→        <h2 className="text-2xl md:text-3xl font-bold text-white mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Our Trusted Partners</h2>
+   747→      </div>
+   748→      <div className="relative">
+   749→        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#0A0A0A] to-transparent z-10" />
+   750→        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#0A0A0A] to-transparent z-10" />
+   751→        <div className="partner-scroll flex gap-8 items-center whitespace-nowrap">
+   752→          {doubled.map((p, i) => (
+   753→            <div key={`${p.id}-${i}`} className="flex-shrink-0 px-8 py-4 bg-[#1A1A1A] rounded-lg border border-white/5 hover:border-[#FFD700]/30 transition-colors flex items-center justify-center min-w-[180px]">
+   754→              <span className="text-white/60 text-sm font-medium">{p.logo}</span>
+   755→            </div>
+   756→          ))}
+   757→        </div>
+   758→      </div>
+   759→    </section>
+   760→  );
+   761→}
+   762→
+   763→// ─── FAQ ────────────────────────────────────────────────
+   764→function FAQSection() {
+   765→  const [openId, setOpenId] = useState<number | null>(1);
+   766→  return (
+   767→    <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-white">
+   768→      <div className="max-w-7xl mx-auto">
+   769→        <SectionTitle subtitle="FAQ" title="Frequently Asked Questions" description="Find answers to the most common questions about our programs, admissions, and career opportunities." />
+   770→        <div className="max-w-3xl mx-auto space-y-4">
+   771→          {faqItems.map((item) => (
+   772→            <div key={item.id} className={`border rounded-lg transition-all duration-300 ${openId === item.id ? 'border-[#FFD700]/30 bg-[#FFD700]/5 shadow-sm' : 'border-[#888]/10 bg-white hover:border-[#FFD700]/20'}`}>
+   773→              <button onClick={() => setOpenId(openId === item.id ? null : item.id)} className="w-full flex items-center justify-between p-6 text-left">
+   774→                <span className={`font-semibold pr-4 transition-colors ${openId === item.id ? 'text-[#FFD700]' : 'text-[#0A0A0A]'}`} style={{ fontFamily: "'Playfair Display', serif" }}>{item.question}</span>
+   775→                <ChevronDown className={`w-5 h-5 shrink-0 transition-all duration-300 ${openId === item.id ? 'rotate-180 text-[#FFD700]' : 'text-[#888]'}`} />
+   776→              </button>
+   777→              <div className={`overflow-hidden transition-all duration-300 ${openId === item.id ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+   778→                <div className="px-6 pb-6 text-[#888] text-sm leading-relaxed">{item.answer}</div>
+   779→              </div>
+   780→            </div>
+   781→          ))}
+   782→        </div>
+   783→      </div>
+   784→    </section>
+   785→  );
+   786→}
+   787→
+   788→// ─── FORMATION PAGE ─────────────────────────────────────
+   789→function FormationPage({ slug, navigateTo }: { slug: string; navigateTo: (p: Page) => void }) {
+   790→  const course = getCourseBySlug(slug);
+   791→  if (!course) return <div className="pt-32 text-center"><h2 className="text-2xl font-bold">Course not found</h2><button onClick={() => navigateTo('home')} className="mt-4 text-[#FFD700]">Go Home</button></div>;
+   792→
+   793→  return (
+   794→    <>
+   795→      <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
+   796→        <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
+   797→        <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/80 via-[#0A0A0A]/60 to-[#0A0A0A]/40" />
+   798→        <div className="absolute inset-0 flex items-center">
+   799→          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   800→            <div className="max-w-2xl">
+   801→              <div className="flex items-center gap-3 mb-4">
+   802→                <button onClick={() => navigateTo('home')} className="text-white/60 hover:text-[#FFD700] text-sm transition-colors">Formations</button>
+   803→                <span className="text-white/30">/</span>
+   804→                <span className="text-[#FFD700] text-sm">{course.title}</span>
+   805→              </div>
+   806→              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>{course.title}</h1>
+   807→              <p className="text-white/70 text-lg mb-6">{course.subtitle}</p>
+   808→              <div className="flex flex-wrap gap-6">
+   809→                <div className="flex items-center gap-2 text-[#FFD700]"><Clock className="w-4 h-4" /><span className="text-sm font-medium">{course.duration}</span></div>
+   810→                <div className="flex items-center gap-2 text-[#FFD700]"><Award className="w-4 h-4" /><span className="text-sm font-medium">{course.level}</span></div>
+   811→                <div className="flex items-center gap-2 text-[#FFD700]"><Star className="w-4 h-4" /><span className="text-sm font-medium">{course.price}</span></div>
+   812→              </div>
+   813→            </div>
+   814→          </div>
+   815→        </div>
+   816→      </section>
+   817→      <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-white">
+   818→        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
+   819→          <div className="lg:col-span-2 space-y-12">
+   820→            <div>
+   821→              <h2 className="text-2xl md:text-3xl font-bold text-[#0A0A0A] mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>About This Program</h2>
+   822→              <p className="text-[#888] leading-relaxed">{course.description}</p>
+   823→            </div>
+   824→            <div>
+   825→              <h2 className="text-2xl md:text-3xl font-bold text-[#0A0A0A] mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>Program Benefits</h2>
+   826→              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+   827→                {course.benefits.map((b, i) => (
+   828→                  <div key={i} className="flex items-start gap-3 p-4 bg-[#FFD700]/5 rounded-lg">
+   829→                    <CheckCircle className="w-5 h-5 text-[#FFD700] shrink-0 mt-0.5" />
+   830→                    <span className="text-[#0A0A0A] text-sm">{b}</span>
+   831→                  </div>
+   832→                ))}
+   833→              </div>
+   834→            </div>
+   835→            <div>
+   836→              <div className="flex items-center gap-3 mb-6"><BookOpen className="w-6 h-6 text-[#FFD700]" /><h2 className="text-2xl md:text-3xl font-bold text-[#0A0A0A]" style={{ fontFamily: "'Playfair Display', serif" }}>Curriculum</h2></div>
+   837→              <div className="space-y-3">
+   838→                {course.curriculum.map((item, i) => (
+   839→                  <div key={i} className="flex items-center gap-4 p-4 border border-[#888]/10 rounded-lg hover:border-[#FFD700]/30 transition-colors">
+   840→                    <div className="w-8 h-8 rounded-full bg-[#FFD700]/10 flex items-center justify-center shrink-0">
+   841→                      <span className="text-[#FFD700] text-xs font-bold">{String(i + 1).padStart(2, '0')}</span>
+   842→                    </div>
+   843→                    <span className="text-[#0A0A0A] text-sm font-medium">{item}</span>
+   844→                  </div>
+   845→                ))}
+   846→              </div>
+   847→            </div>
+   848→          </div>
+   849→          <div className="lg:col-span-1">
+   850→            <div className="sticky top-28 bg-[#0A0A0A] rounded-lg p-8 text-white">
+   851→              <h3 className="text-xl font-bold text-[#FFD700] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Enroll Now</h3>
+   852→              <p className="text-white/50 text-sm mb-6">Start your journey in {course.title} today</p>
+   853→              <form onSubmit={(e) => { e.preventDefault(); alert('Registration submitted! We will contact you soon.'); }} className="space-y-4">
+   854→                <div>
+   855→                  <label className="block text-white/60 text-xs uppercase tracking-wider mb-2">Full Name</label>
+   856→                  <input type="text" required className="w-full bg-[#1A1A1A] border border-white/10 rounded px-4 py-3 text-white text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-white/30" placeholder="Enter your full name" />
+   857→                </div>
+   858→                <div>
+   859→                  <label className="block text-white/60 text-xs uppercase tracking-wider mb-2">Email</label>
+   860→                  <input type="email" required className="w-full bg-[#1A1A1A] border border-white/10 rounded px-4 py-3 text-white text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-white/30" placeholder="your@email.com" />
+   861→                </div>
+   862→                <div>
+   863→                  <label className="block text-white/60 text-xs uppercase tracking-wider mb-2">Phone Number</label>
+   864→                  <input type="tel" required className="w-full bg-[#1A1A1A] border border-white/10 rounded px-4 py-3 text-white text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-white/30" placeholder="+233 XX XXX XXXX" />
+   865→                </div>
+   866→                <div>
+   867→                  <label className="block text-white/60 text-xs uppercase tracking-wider mb-2">Program</label>
+   868→                  <select className="w-full bg-[#1A1A1A] border border-white/10 rounded px-4 py-3 text-white text-sm focus:border-[#FFD700] focus:outline-none" defaultValue={course.title}>
+   869→                    <option>{course.title}</option>
+   870→                  </select>
+   871→                </div>
+   872→                <div>
+   873→                  <label className="block text-white/60 text-xs uppercase tracking-wider mb-2">Message (Optional)</label>
+   874→                  <textarea rows={3} className="w-full bg-[#1A1A1A] border border-white/10 rounded px-4 py-3 text-white text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-white/30 resize-none" placeholder="Any questions?" />
+   875→                </div>
+   876→                <button type="submit" className="bg-[#FFD700] text-[#0A0A0A] font-semibold px-8 py-3 w-full text-sm uppercase tracking-wider hover:bg-[#E6C200] transition-all inline-flex items-center justify-center gap-2">
+   877→                  Submit Registration <ArrowRight className="w-4 h-4" />
+   878→                </button>
+   879→              </form>
+   880→            </div>
+   881→          </div>
+   882→        </div>
+   883→      </section>
+   884→    </>
+   885→  );
+   886→}
+   887→
+   888→// ─── GALLERY PAGE ───────────────────────────────────────
+   889→function GalleryPage() {
+   890→  const [activeCategory, setActiveCategory] = useState('all');
+   891→  const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
+   892→  const categories = [
+   893→    { label: 'All', value: 'all' },
+   894→    { label: 'Makeup', value: 'makeup' },
+   895→    { label: 'Nails', value: 'nails' },
+   896→    { label: 'Hair', value: 'hair' },
+   897→    { label: 'Lashes', value: 'lashes' },
+   898→    { label: 'Graduation', value: 'graduation' },
+   899→    { label: 'Classroom', value: 'classroom' },
+   900→  ];
+   901→  const filtered = activeCategory === 'all' ? galleryItems : galleryItems.filter((item) => item.category === activeCategory);
+   902→
+   903→  return (
+   904→    <>
+   905→      <section className="relative h-[40vh] min-h-[300px] overflow-hidden bg-[#0A0A0A] flex items-center justify-center">
+   906→        <div className="absolute inset-0 bg-[url('/images/about-salon.jpg')] bg-cover bg-center opacity-20" />
+   907→        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/80 to-[#0A0A0A]" />
+   908→        <div className="relative z-10 text-center">
+   909→          <div className="flex items-center justify-center gap-3 mb-4"><div className="h-px w-8 bg-[#FFD700]" /><span className="text-[#FFD700] text-xs uppercase tracking-[0.3em] font-semibold">Portfolio</span><div className="h-px w-8 bg-[#FFD700]" /></div>
+   910→          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>Our Gallery</h1>
+   911→          <p className="text-white/60 max-w-lg mx-auto">Explore the creativity and talent of our students and graduates.</p>
+   912→        </div>
+   913→      </section>
+   914→      <section className="bg-white border-b border-[#888]/10">
+   915→        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-wrap justify-center gap-3">
+   916→          {categories.map((cat) => (
+   917→            <button key={cat.value} onClick={() => setActiveCategory(cat.value)} className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === cat.value ? 'bg-[#FFD700] text-[#0A0A0A]' : 'bg-[#F5F5F5] text-[#888] hover:bg-[#FFD700]/10 hover:text-[#FFD700]'}`}>
+   918→              {cat.label}
+   919→            </button>
+   920→          ))}
+   921→        </div>
+   922→      </section>
+   923→      <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-[#F5F5F5]">
+   924→        <div className="max-w-7xl mx-auto">
+   925→          <div className="masonry-grid">
+   926→            {filtered.map((item) => (
+   927→              <div key={item.id} className="masonry-item group cursor-pointer" onClick={() => setSelectedImage(item)}>
+   928→                <div className="relative overflow-hidden rounded-lg">
+   929→                  <img src={item.src} alt={item.alt} className="w-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+   930→                  <div className="absolute inset-0 bg-[#0A0A0A]/0 group-hover:bg-[#0A0A0A]/40 transition-colors duration-300 flex items-center justify-center">
+   931→                    <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-lg font-semibold" style={{ fontFamily: "'Playfair Display', serif" }}>{item.alt}</span>
+   932→                  </div>
+   933→                </div>
+   934→              </div>
+   935→            ))}
+   936→          </div>
+   937→          {filtered.length === 0 && <div className="text-center py-16"><p className="text-[#888] text-lg">No images found in this category.</p></div>}
+   938→        </div>
+   939→      </section>
+   940→      {selectedImage && (
+   941→        <div className="fixed inset-0 z-50 bg-[#0A0A0A]/95 flex items-center justify-center p-4" onClick={() => setSelectedImage(null)}>
+   942→          <button className="absolute top-6 right-6 text-white/60 hover:text-[#FFD700] transition-colors" onClick={() => setSelectedImage(null)}><XIcon className="w-8 h-8" /></button>
+   943→          <img src={selectedImage.src} alt={selectedImage.alt} className="max-w-full max-h-[85vh] object-contain rounded-lg" onClick={(e) => e.stopPropagation()} />
+   944→          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-sm">{selectedImage.alt}</div>
+   945→        </div>
+   946→      )}
+   947→    </>
+   948→  );
+   949→}
+   950→
+   951→// ─── CONTACT PAGE ───────────────────────────────────────
+   952→function ContactPage() {
+   953→  const [formData, setFormData] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
+   954→  const handleSubmit = (e: React.FormEvent) => {
+   955→    e.preventDefault();
+   956→    alert('Thank you for your message! We will get back to you shortly.');
+   957→    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+   958→  };
+   959→  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+   960→    setFormData({ ...formData, [e.target.name]: e.target.value });
+   961→  };
+   962→
+   963→  return (
+   964→    <>
+   965→      <section className="relative h-[40vh] min-h-[300px] overflow-hidden bg-[#0A0A0A] flex items-center justify-center">
+   966→        <div className="absolute inset-0 bg-[url('/images/about-salon.jpg')] bg-cover bg-center opacity-20" />
+   967→        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/80 to-[#0A0A0A]" />
+   968→        <div className="relative z-10 text-center">
+   969→          <div className="flex items-center justify-center gap-3 mb-4"><div className="h-px w-8 bg-[#FFD700]" /><span className="text-[#FFD700] text-xs uppercase tracking-[0.3em] font-semibold">Get In Touch</span><div className="h-px w-8 bg-[#FFD700]" /></div>
+   970→          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>Contact Us</h1>
+   971→          <p className="text-white/60 max-w-lg mx-auto">Have questions about our programs? We would love to hear from you.</p>
+   972→        </div>
+   973→      </section>
+   974→
+   975→      <section className="bg-white">
+   976→        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-10">
+   977→          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+   978→            {[
+   979→              { icon: MapPin, title: 'Visit Us', info: 'Accra, Ghana', detail: 'Diamond Secret Beauty School' },
+   980→              { icon: Phone, title: 'Call Us', info: '+233 20 946 1260', detail: '+233 54 379 5688' },
+   981→              { icon: Mail, title: 'Email Us', info: 'info@diamondsecretbeauty.com', detail: 'admissions@diamondsecretbeauty.com' },
+   982→              { icon: Clock, title: 'Working Hours', info: 'Mon - Sat: 8AM - 6PM', detail: 'Sunday: Closed' },
+   983→            ].map((item, i) => (
+   984→              <div key={i} className="bg-[#0A0A0A] p-6 rounded-lg text-center hover:-translate-y-1 transition-transform">
+   985→                <item.icon className="w-8 h-8 text-[#FFD700] mx-auto mb-4" />
+   986→                <h3 className="font-bold text-white mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>{item.title}</h3>
+   987→                <p className="text-[#FFD700] text-sm font-medium">{item.info}</p>
+   988→                <p className="text-white/50 text-xs mt-1">{item.detail}</p>
+   989→              </div>
+   990→            ))}
+   991→          </div>
+   992→        </div>
+   993→      </section>
+   994→
+   995→      <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-[#F5F5F5]">
+   996→        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+   997→          <div className="bg-white rounded-lg p-8 shadow-sm">
+   998→            <h2 className="text-2xl md:text-3xl font-bold text-[#0A0A0A] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Send Us a Message</h2>
+   999→            <p className="text-[#888] text-sm mb-8">Fill out the form below and our team will get back to you within 24 hours.</p>
+  1000→            <form onSubmit={handleSubmit} className="space-y-5">
+  1001→              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+  1002→                <div>
+  1003→                  <label className="block text-[#0A0A0A] text-xs uppercase tracking-wider mb-2 font-medium">Full Name *</label>
+  1004→                  <input type="text" name="name" required value={formData.name} onChange={handleChange} className="w-full border border-[#888]/20 rounded px-4 py-3 text-[#0A0A0A] text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-[#888]/50" placeholder="Your full name" />
+  1005→                </div>
+  1006→                <div>
+  1007→                  <label className="block text-[#0A0A0A] text-xs uppercase tracking-wider mb-2 font-medium">Email *</label>
+  1008→                  <input type="email" name="email" required value={formData.email} onChange={handleChange} className="w-full border border-[#888]/20 rounded px-4 py-3 text-[#0A0A0A] text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-[#888]/50" placeholder="your@email.com" />
+  1009→                </div>
+  1010→              </div>
+  1011→              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+  1012→                <div>
+  1013→                  <label className="block text-[#0A0A0A] text-xs uppercase tracking-wider mb-2 font-medium">Phone</label>
+  1014→                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full border border-[#888]/20 rounded px-4 py-3 text-[#0A0A0A] text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-[#888]/50" placeholder="+233 XX XXX XXXX" />
+  1015→                </div>
+  1016→                <div>
+  1017→                  <label className="block text-[#0A0A0A] text-xs uppercase tracking-wider mb-2 font-medium">Subject *</label>
+  1018→                  <select name="subject" required value={formData.subject} onChange={handleChange} className="w-full border border-[#888]/20 rounded px-4 py-3 text-[#0A0A0A] text-sm focus:border-[#FFD700] focus:outline-none">
+  1019→                    <option value="">Select a subject</option>
+  1020→                    <option value="enrollment">Program Enrollment</option>
+  1021→                    <option value="info">General Information</option>
+  1022→                    <option value="pricing">Pricing & Payment</option>
+  1023→                    <option value="other">Other</option>
+  1024→                  </select>
+  1025→                </div>
+  1026→              </div>
+  1027→              <div>
+  1028→                <label className="block text-[#0A0A0A] text-xs uppercase tracking-wider mb-2 font-medium">Message *</label>
+  1029→                <textarea name="message" required rows={5} value={formData.message} onChange={handleChange} className="w-full border border-[#888]/20 rounded px-4 py-3 text-[#0A0A0A] text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-[#888]/50 resize-none" placeholder="Tell us how we can help you..." />
+  1030→              </div>
+  1031→              <button type="submit" className="bg-[#FFD700] text-[#0A0A0A] font-semibold px-8 py-3 text-sm uppercase tracking-wider hover:bg-[#E6C200] transition-all inline-flex items-center gap-2">
+  1032→                Send Message <Send className="w-4 h-4" />
+  1033→              </button>
+  1034→            </form>
+  1035→          </div>
+  1036→          <div className="space-y-6">
+  1037→            <div className="rounded-lg overflow-hidden shadow-sm h-[350px] bg-[#888]/10">
+  1038→              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253682.45932537498!2d-0.3575877!3d5.5912087!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfdf9084b2b7a777%3A0x22e4fbfa3a5a2f3b!2sAccra%2C%20Ghana!5e0!3m2!1sen!2s!4v1700000000000!5m2!1sen!2s" width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Location" />
+  1039→            </div>
+  1040→            <div className="bg-[#0A0A0A] rounded-lg p-8 flex flex-col sm:flex-row items-center gap-6">
+  1041→              <div className="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shrink-0">
+  1042→                <MessageCircle className="w-8 h-8 text-white" />
+  1043→              </div>
+  1044→              <div className="text-center sm:text-left">
+  1045→                <h3 className="text-xl font-bold text-white mb-1" style={{ fontFamily: "'Playfair Display', serif" }}>Quick Response via WhatsApp</h3>
+  1046→                <p className="text-white/50 text-sm mb-4">Get instant answers directly on WhatsApp</p>
+  1047→                <a href="https://wa.me/233209461260?text=Hello%20Diamond%20Secret%20Beauty%20School!" target="_blank" rel="noopener noreferrer" className="bg-[#FFD700] text-[#0A0A0A] font-semibold px-8 py-3 text-sm uppercase tracking-wider hover:bg-[#E6C200] transition-all inline-flex items-center gap-2">
+  1048→                  Chat on WhatsApp <ArrowRight className="w-4 h-4" />
+  1049→                </a>
+  1050→              </div>
+  1051→            </div>
+  1052→          </div>
+  1053→        </div>
+  1054→      </section>
+  1055→    </>
+  1056→  );
+  1057→}
+  1058→

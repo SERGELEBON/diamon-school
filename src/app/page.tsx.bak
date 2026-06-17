@@ -1,0 +1,1057 @@
+// Updated: pricing section added v2.0
+'use client';
+
+import { useState, useEffect, useCallback, useRef } from 'react';
+import {
+  Diamond,
+  Menu,
+  X,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Award,
+  ArrowRight,
+  CheckCircle,
+  BookOpen,
+  Star,
+  MapPin,
+  Phone,
+  Mail,
+  Send,
+  MessageCircle,
+  Sparkles,
+  Heart,
+  Users,
+  UserCheck,
+  FileText,
+  CreditCard,
+  GraduationCap,
+  Quote,
+  XIcon,
+  Home,
+  Shirt,
+  BadgeCheck,
+  Calendar,
+} from 'lucide-react';
+import { courses, getCourseBySlug, type Course } from '@/data/courses';
+import { testimonials } from '@/data/testimonials';
+import { faqItems } from '@/data/faq';
+import { galleryItems, type GalleryItem } from '@/data/gallery';
+
+// ─── Navigation Types ───────────────────────────────────
+type Page = 'home' | 'formation' | 'gallery' | 'contact';
+
+// ─── MAIN PAGE COMPONENT ────────────────────────────────
+export default function Home() {
+  const [page, setPage] = useState<Page>('home');
+  const [selectedSlug, setSelectedSlug] = useState<string>('');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [formationsOpen, setFormationsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const formationsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (formationsRef.current && !formationsRef.current.contains(e.target as Node)) {
+        setFormationsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const navigateTo = (p: Page, slug?: string) => {
+    setPage(p);
+    if (slug) setSelectedSlug(slug);
+    setMenuOpen(false);
+    setFormationsOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const scrollToFormations = () => {
+    if (page === 'home') {
+      document.getElementById('formations')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      setPage('home');
+      setTimeout(() => {
+        document.getElementById('formations')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+    setMenuOpen(false);
+    setFormationsOpen(false);
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col" style={{ fontFamily: "'Inter', sans-serif" }}>
+      {/* ─── NAVBAR ──────────────────────────────────── */}
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          mounted && scrolled ? 'bg-[#0A0A0A]/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            <button onClick={() => navigateTo('home')} className="flex items-center group">
+              <img
+                src="/images/logo.png"
+                alt="Diamond Secret Beauty School"
+                className="h-14 w-14 sm:h-16 sm:w-16 object-cover rounded-full border-2 border-[#FFD700]/50 shadow-lg group-hover:scale-105 transition-transform duration-300"
+              />
+            </button>
+
+            {/* Desktop Nav */}
+            <div className="hidden lg:flex items-center gap-8">
+              <button onClick={() => navigateTo('home')} className={`text-sm uppercase tracking-widest font-medium transition-colors hover:text-[#FFD700] ${page === 'home' ? 'text-[#FFD700]' : 'text-white/80'}`}>
+                Home
+              </button>
+              <div ref={formationsRef} className="relative">
+                <button onClick={() => setFormationsOpen(!formationsOpen)} className="flex items-center gap-1 text-sm uppercase tracking-widest font-medium transition-colors hover:text-[#FFD700] text-white/80">
+                  Formations <ChevronDown className={`w-3 h-3 transition-transform ${formationsOpen ? 'rotate-180' : ''}`} />
+                </button>
+                <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-72 bg-[#0A0A0A]/95 backdrop-blur-md rounded-lg border border-white/10 shadow-xl transition-all duration-300 origin-top ${formationsOpen ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'}`}>
+                  <div className="p-2">
+                    <button onClick={scrollToFormations} className="w-full text-left px-4 py-3 text-white/60 hover:text-[#FFD700] hover:bg-[#FFD700]/5 rounded transition-colors text-sm">
+                      View All Programs
+                    </button>
+                    <div className="h-px bg-white/5 my-1" />
+                    {courses.map((c) => (
+                      <button key={c.id} onClick={() => navigateTo('formation', c.slug)} className="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-[#FFD700] hover:bg-[#FFD700]/5 rounded transition-colors text-sm w-full text-left">
+                        <span className="text-lg">{c.icon}</span><span>{c.title}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <button onClick={() => navigateTo('gallery')} className={`text-sm uppercase tracking-widest font-medium transition-colors hover:text-[#FFD700] ${page === 'gallery' ? 'text-[#FFD700]' : 'text-white/80'}`}>
+                Gallery
+              </button>
+              <button onClick={() => navigateTo('contact')} className={`text-sm uppercase tracking-widest font-medium transition-colors hover:text-[#FFD700] ${page === 'contact' ? 'text-[#FFD700]' : 'text-white/80'}`}>
+                Contact
+              </button>
+              <button onClick={() => navigateTo('contact')} className="bg-[#FFD700] text-[#0A0A0A] font-semibold px-8 py-3 text-xs uppercase tracking-wider hover:bg-[#E6C200] transition-all duration-300 inline-flex items-center gap-2">
+                Enroll Now
+              </button>
+            </div>
+
+            {/* Mobile menu button */}
+            <button className="lg:hidden text-white hover:text-[#FFD700] transition-colors" onClick={() => setMenuOpen(!menuOpen)}>
+              {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+
+          {/* Mobile Nav */}
+          <div className={`lg:hidden overflow-hidden transition-all duration-500 ${menuOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'}`}>
+            <div className="pb-6 pt-2 space-y-1 bg-[#0A0A0A]/95 backdrop-blur-md rounded-b-lg">
+              <button onClick={() => navigateTo('home')} className="block w-full text-left px-4 py-3 text-white/80 hover:text-[#FFD700] text-sm uppercase tracking-widest">Home</button>
+              <button onClick={scrollToFormations} className="block w-full text-left px-4 py-3 text-white/80 hover:text-[#FFD700] text-sm uppercase tracking-widest">Formations</button>
+              {courses.map((c) => (
+                <button key={c.id} onClick={() => navigateTo('formation', c.slug)} className="flex items-center gap-2 pl-8 pr-4 py-2 text-white/50 hover:text-[#FFD700] text-sm w-full text-left">
+                  <span>{c.icon}</span><span>{c.title}</span>
+                </button>
+              ))}
+              <button onClick={() => navigateTo('gallery')} className="block w-full text-left px-4 py-3 text-white/80 hover:text-[#FFD700] text-sm uppercase tracking-widest">Gallery</button>
+              <button onClick={() => navigateTo('contact')} className="block w-full text-left px-4 py-3 text-white/80 hover:text-[#FFD700] text-sm uppercase tracking-widest">Contact</button>
+              <div className="px-4 pt-2">
+                <button onClick={() => navigateTo('contact')} className="bg-[#FFD700] text-[#0A0A0A] font-semibold px-8 py-3 w-full text-xs uppercase tracking-wider flex items-center justify-center gap-2">
+                  Enroll Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* ─── PAGES ───────────────────────────────────── */}
+      <main className="flex-1">
+        {page === 'home' && <HomePage navigateTo={navigateTo} />}
+        {page === 'formation' && <FormationPage slug={selectedSlug} navigateTo={navigateTo} />}
+        {page === 'gallery' && <GalleryPage />}
+        {page === 'contact' && <ContactPage />}
+      </main>
+
+      {/* ─── FOOTER ──────────────────────────────────── */}
+      <footer className="bg-[#0A0A0A] text-white/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div className="space-y-4">
+              <button onClick={() => navigateTo('home')} className="flex items-center group">
+                <img
+                  src="/images/logo.png"
+                  alt="Diamond Secret Beauty School"
+                  className="h-20 w-20 sm:h-24 sm:w-24 object-cover rounded-full border-2 border-[#FFD700]/50 shadow-lg group-hover:scale-105 transition-transform duration-300"
+                />
+              </button>
+              <p className="text-white/60 text-sm leading-relaxed">Empowering beauty professionals with world-class education and hands-on training.</p>
+            </div>
+            <div>
+              <h4 className="text-[#FFD700] text-lg font-semibold mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>Quick Links</h4>
+              <ul className="space-y-3">
+                {[{ l: 'Home', p: 'home' as Page }, { l: 'Our Formations', p: 'home' as Page }, { l: 'Gallery', p: 'gallery' as Page }, { l: 'Contact Us', p: 'contact' as Page }].map((item, i) => (
+                  <li key={i}><button onClick={() => navigateTo(item.p)} className="text-white/60 hover:text-[#FFD700] transition-colors text-sm">{item.l}</button></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-[#FFD700] text-lg font-semibold mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>Formations</h4>
+              <ul className="space-y-3">
+                {courses.map((c) => (
+                  <li key={c.id}><button onClick={() => navigateTo('formation', c.slug)} className="text-white/60 hover:text-[#FFD700] transition-colors text-sm">{c.title}</button></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-[#FFD700] text-lg font-semibold mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>Contact Info</h4>
+              <ul className="space-y-4">
+                <li className="flex items-start gap-3"><MapPin className="w-4 h-4 text-[#FFD700] mt-1 shrink-0" /><span className="text-white/60 text-sm">Accra, Ghana</span></li>
+                <li className="flex items-center gap-3"><Phone className="w-4 h-4 text-[#FFD700] shrink-0" /><a href="tel:+233209461260" className="text-white/60 hover:text-[#FFD700] text-sm">+233 20 946 1260</a></li>
+                <li className="flex items-center gap-3"><Mail className="w-4 h-4 text-[#FFD700] shrink-0" /><span className="text-white/60 text-sm">info@diamondsecretbeauty.com</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-white/10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-white/40 text-xs" suppressHydrationWarning>&copy; {new Date().getFullYear()} Diamond Secret Beauty School. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+
+      {/* ─── WHATSAPP FLOAT ──────────────────────────── */}
+      <a
+        href="https://wa.me/233209461260?text=Hello%20Diamond%20Secret%20Beauty%20School!"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
+        aria-label="WhatsApp"
+      >
+        <MessageCircle className="w-6 h-6 text-white" />
+      </a>
+    </div>
+  );
+}
+
+// ─── SECTION TITLE ──────────────────────────────────────
+function SectionTitle({ subtitle, title, description, light = false }: { subtitle?: string; title: string; description?: string; light?: boolean }) {
+  return (
+    <div className="text-center mb-16">
+      {subtitle && (
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <div className="h-px w-8 bg-[#FFD700]" />
+          <span className="text-[#FFD700] text-xs uppercase tracking-[0.3em] font-semibold">{subtitle}</span>
+          <div className="h-px w-8 bg-[#FFD700]" />
+        </div>
+      )}
+      <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-4 ${light ? 'text-white' : 'text-[#0A0A0A]'}`} style={{ fontFamily: "'Playfair Display', serif" }}>
+        {title}
+      </h2>
+      {description && (
+        <p className={`max-w-2xl mx-auto text-sm md:text-base leading-relaxed ${light ? 'text-white/60' : 'text-[#888]'}`}>
+          {description}
+        </p>
+      )}
+      <div className="flex items-center justify-center gap-2 mt-6">
+        <div className="h-px w-12 bg-[#FFD700]/40" />
+        <Diamond className="w-4 h-4 text-[#FFD700]" />
+        <div className="h-px w-12 bg-[#FFD700]/40" />
+      </div>
+    </div>
+  );
+}
+
+// ─── HOME PAGE ──────────────────────────────────────────
+function HomePage({ navigateTo }: { navigateTo: (p: Page, slug?: string) => void }) {
+  return (
+    <>
+      <HeroSlider navigateTo={navigateTo} />
+      <AboutSection />
+      <FounderSection />
+      <FormationsSection navigateTo={navigateTo} />
+      <PricingTuitionSection navigateTo={navigateTo} />
+      <CTABanner navigateTo={navigateTo} />
+      <HowToRegisterSection navigateTo={navigateTo} />
+      <TestimonialsSection />
+      <PartnersSection />
+      <FAQSection />
+    </>
+  );
+}
+
+// ─── HERO SLIDER ────────────────────────────────────────
+function HeroSlider({ navigateTo }: { navigateTo: (p: Page, slug?: string) => void }) {
+  const slides = [
+    { image: '/images/hero-makeup.jpg', title: 'Master the Art of Beauty', subtitle: 'Professional makeup artistry training with industry experts', cta: 'Explore Makeup Program', slug: 'maquillage' },
+    { image: '/images/hero-nails.jpg', title: 'Create Stunning Nail Art', subtitle: 'From basic techniques to advanced creative designs', cta: 'Explore Nail Program', slug: 'onglerie' },
+    { image: '/images/hero-hair.jpg', title: 'Transform with Hairdressing', subtitle: 'Expert training for all hair types and textures', cta: 'Explore Hair Program', slug: 'coiffure' },
+    { image: '/images/hero-graduation.jpg', title: 'Your Future Starts Here', subtitle: 'Join our graduates building successful beauty careers', cta: 'Start Your Journey', slug: '' },
+  ];
+  const [current, setCurrent] = useState(0);
+
+  const next = useCallback(() => setCurrent((c) => (c + 1) % slides.length), [slides.length]);
+  const prev = useCallback(() => setCurrent((c) => (c - 1 + slides.length) % slides.length), [slides.length]);
+
+  useEffect(() => {
+    const timer = setInterval(next, 5000);
+    return () => clearInterval(timer);
+  }, [next]);
+
+  return (
+    <section className="relative h-screen min-h-[600px] overflow-hidden">
+      {slides.map((slide, i) => (
+        <div key={i} className={`absolute inset-0 transition-opacity duration-1000 ${i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
+          <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/80 via-[#0A0A0A]/50 to-[#0A0A0A]/30" />
+        </div>
+      ))}
+      <div className="absolute inset-0 z-20 flex items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px w-12 bg-[#FFD700]" />
+              <span className="text-[#FFD700] text-xs uppercase tracking-[0.3em] font-semibold">Diamond Secret Beauty School</span>
+            </div>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
+              {slides[current].title}
+            </h1>
+            <p className="text-white/70 text-lg md:text-xl mb-8 leading-relaxed">{slides[current].subtitle}</p>
+            <div className="flex flex-wrap gap-4">
+              <button onClick={() => slides[current].slug ? navigateTo('formation', slides[current].slug) : navigateTo('contact')} className="bg-[#FFD700] text-[#0A0A0A] font-semibold px-8 py-3 text-sm uppercase tracking-wider hover:bg-[#E6C200] transition-all duration-300 inline-flex items-center gap-2">
+                {slides[current].cta}
+              </button>
+              <button onClick={() => document.getElementById('formations')?.scrollIntoView({ behavior: 'smooth' })} className="border-2 border-[#FFD700] text-[#FFD700] font-semibold px-8 py-3 text-sm uppercase tracking-wider hover:bg-[#FFD700] hover:text-[#0A0A0A] transition-all duration-300 inline-flex items-center gap-2">
+                View Programs
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button onClick={prev} className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 border border-white/30 rounded-full flex items-center justify-center text-white hover:border-[#FFD700] hover:text-[#FFD700] transition-all backdrop-blur-sm" aria-label="Previous">
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      <button onClick={next} className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 border border-white/30 rounded-full flex items-center justify-center text-white hover:border-[#FFD700] hover:text-[#FFD700] transition-all backdrop-blur-sm" aria-label="Next">
+        <ChevronRight className="w-5 h-5" />
+      </button>
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+        {slides.map((_, i) => (
+          <button key={i} onClick={() => setCurrent(i)} className={`transition-all duration-300 ${i === current ? 'w-8 h-2 bg-[#FFD700] rounded-full' : 'w-2 h-2 bg-white/40 rounded-full hover:bg-white/60'}`} aria-label={`Slide ${i + 1}`} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── ABOUT SECTION ──────────────────────────────────────
+function AboutSection() {
+  return (
+    <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-[#0A0A0A]">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="relative">
+          <img src="/images/about-salon.jpg" alt="School Interior" className="relative z-10 w-full h-[500px] object-cover rounded-lg shadow-2xl" />
+          <div className="absolute -bottom-6 -right-6 w-48 h-48 border-2 border-[#FFD700] rounded-lg z-0" />
+          <div className="absolute -top-6 -left-6 w-32 h-32 bg-[#FFD700]/10 rounded-lg z-0" />
+        </div>
+        <div>
+          <SectionTitle subtitle="About Us" title="Where Beauty Meets Excellence" description="Diamond Secret Beauty School is a premier institution dedicated to transforming passionate individuals into skilled beauty professionals. Founded with a vision to elevate beauty education in West Africa, we combine world-class training techniques with a deep understanding of diverse beauty needs." light />
+          <div className="grid grid-cols-3 gap-6 mt-8">
+            {[
+              { icon: Sparkles, num: '500+', label: 'Graduates' },
+              { icon: Heart, num: '98%', label: 'Satisfaction' },
+              { icon: Star, num: '5+', label: 'Programs' },
+            ].map((s, i) => (
+              <div key={i} className="text-center p-4 bg-[#1A1A1A] rounded-lg">
+                <s.icon className="w-6 h-6 text-[#FFD700] mx-auto mb-2" />
+                <div className="text-2xl font-bold text-[#FFD700]" style={{ fontFamily: "'Playfair Display', serif" }}>{s.num}</div>
+                <div className="text-white/50 text-xs uppercase tracking-wider mt-1">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── FOUNDER SECTION ────────────────────────────────────
+function FounderSection() {
+  return (
+    <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-white">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="order-2 lg:order-1">
+          <SectionTitle subtitle="Our Founder" title="Meet the Visionary Behind Diamond Secret" description="With over a decade of experience in the beauty industry, our founder established Diamond Secret Beauty School with a powerful vision: to create a world-class institution that empowers African women with the skills, knowledge, and confidence to build successful careers in beauty." />
+          <p className="text-[#888] leading-relaxed mb-8">
+            She has trained hundreds of professionals who now operate successful salons, freelance businesses, and beauty brands across the continent and beyond. Her commitment to excellence, innovation, and inclusivity continues to drive Diamond Secret Beauty School forward.
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { icon: Heart, label: 'Passion-Driven' },
+              { icon: Star, label: 'Excellence First' },
+              { icon: Users, label: 'Community Focus' },
+              { icon: Diamond, label: 'Integrity Always' },
+            ].map((v, i) => (
+              <div key={i} className="flex items-center gap-3 p-3 bg-[#FFD700]/5 rounded-lg">
+                <v.icon className="w-5 h-5 text-[#FFD700] shrink-0" />
+                <span className="text-[#0A0A0A] text-sm font-medium">{v.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="order-1 lg:order-2 relative">
+          <img src="/images/founder-portrait.jpg" alt="Founder" className="relative z-10 w-full h-[550px] object-cover rounded-lg shadow-xl" />
+          <div className="absolute -bottom-6 -left-6 w-48 h-48 border-2 border-[#FFD700]/30 rounded-lg z-0" />
+          <div className="absolute -top-6 -right-6 bg-[#FFD700] w-24 h-24 rounded-lg z-0 flex items-center justify-center">
+            <Diamond className="w-10 h-10 text-[#0A0A0A]" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── FORMATIONS SECTION ─────────────────────────────────
+function FormationsSection({ navigateTo }: { navigateTo: (p: Page, slug?: string) => void }) {
+  return (
+    <section id="formations" className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-[#F5F5F5]">
+      <div className="max-w-7xl mx-auto">
+        <SectionTitle subtitle="Our Programs" title="Professional Formations" description="Choose from our range of industry-leading beauty programs designed to equip you with the skills and confidence to thrive in the beauty industry." />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {courses.map((course) => (
+            <button key={course.id} onClick={() => navigateTo('formation', course.slug)} className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1 text-left">
+              <div className="relative h-56 overflow-hidden">
+                <img src={course.image} alt={course.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/60 to-transparent" />
+                <div className="absolute top-4 left-4 bg-[#FFD700] text-[#0A0A0A] text-xs font-bold px-3 py-1 uppercase">{course.level}</div>
+                <div className="absolute bottom-4 left-4 text-3xl">{course.icon}</div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-[#0A0A0A] mb-2 group-hover:text-[#FFD700] transition-colors" style={{ fontFamily: "'Playfair Display', serif" }}>{course.title}</h3>
+                <p className="text-[#888] text-sm leading-relaxed mb-4 line-clamp-2">{course.subtitle}</p>
+                <div className="flex items-center justify-between pt-4 border-t border-[#888]/10">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1 text-[#888] text-xs"><Clock className="w-3 h-3" /><span>{course.duration}</span></div>
+                    <div className="flex items-center gap-1 text-[#888] text-xs"><Award className="w-3 h-3" /><span>Certified</span></div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-[#FFD700] group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── PRICING & TUITION SECTION ──────────────────────────
+function PricingTuitionSection({ navigateTo }: { navigateTo: (p: Page) => void }) {
+  const plans = [
+    {
+      duration: '3 Months',
+      price: '2,500',
+      currency: 'GHS',
+      description: 'Choose any 3 selected courses from our curriculum. Perfect for students who want to focus on specific beauty skills and build a strong foundation in their areas of interest.',
+      features: [
+        '3 Selected Courses',
+        'Professional Certification',
+        'Hands-on Practical Training',
+        'Industry-Expert Instructors',
+        'Starter Kit Included',
+      ],
+      highlight: false,
+      badge: '',
+    },
+    {
+      duration: '6 Months',
+      price: '4,000',
+      currency: 'GHS',
+      description: 'Access all main courses in our comprehensive curriculum. Ideal for aspiring beauty professionals who want a well-rounded education covering every major discipline in the beauty industry.',
+      features: [
+        'All Main Courses',
+        'Professional Certification',
+        'Hands-on Practical Training',
+        'Industry-Expert Instructors',
+        'Complete Training Kit',
+        'Portfolio Development',
+      ],
+      highlight: true,
+      badge: 'Most Popular',
+    },
+    {
+      duration: '1 Year',
+      price: '5,500',
+      currency: 'GHS',
+      description: 'Our most comprehensive program with unlimited access to all main courses plus advanced masterclasses. Designed for serious professionals who want complete mastery and career readiness.',
+      features: [
+        'All Main Courses',
+        'Advanced Masterclasses',
+        'Professional Certification',
+        'Hands-on Practical Training',
+        'Complete Training Kit',
+        'Portfolio Development',
+        'Career Placement Support',
+        'Business Starter Guide',
+      ],
+      highlight: false,
+      badge: 'Best Value',
+    },
+  ];
+
+  const additionalFees = [
+    { icon: FileText, label: 'Registration Form', fee: 'GHS 100', description: 'One-time non-refundable registration fee payable upon enrollment.' },
+    { icon: Shirt, label: 'Complete Uniform', fee: 'GHS 800', description: 'Professional uniform set including all required attire for practical sessions.' },
+  ];
+
+  return (
+    <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-white">
+      <div className="max-w-7xl mx-auto">
+        <SectionTitle
+          subtitle="Tuition & Fees"
+          title="Invest in Your Future"
+          description="Transparent pricing with no hidden costs. Choose the plan that fits your career goals and start your journey to becoming a certified beauty professional."
+        />
+
+        {/* ─── PRICING CARDS ──────────────────────────── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          {plans.map((plan, i) => (
+            <div
+              key={i}
+              className={`relative rounded-xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl ${
+                plan.highlight
+                  ? 'bg-[#0A0A0A] text-white border-2 border-[#FFD700] shadow-xl scale-[1.02]'
+                  : 'bg-white text-[#0A0A0A] border border-[#888]/20 shadow-md'
+              }`}
+            >
+              {plan.badge && (
+                <div className="absolute top-0 right-0 bg-[#FFD700] text-[#0A0A0A] text-xs font-bold px-4 py-1.5 uppercase tracking-wider">
+                  {plan.badge}
+                </div>
+              )}
+              <div className="p-8">
+                <div className="flex items-center gap-3 mb-2">
+                  <Calendar className={`w-5 h-5 ${plan.highlight ? 'text-[#FFD700]' : 'text-[#FFD700]'}`} />
+                  <span className={`text-sm uppercase tracking-widest font-semibold ${plan.highlight ? 'text-[#FFD700]' : 'text-[#FFD700]'}`}>
+                    {plan.duration}
+                  </span>
+                </div>
+                <div className="mb-4">
+                  <span className={`text-5xl font-bold ${plan.highlight ? 'text-white' : 'text-[#0A0A0A]'}`} style={{ fontFamily: "'Playfair Display', serif" }}>
+                    {plan.price}
+                  </span>
+                  <span className={`text-sm ml-1 ${plan.highlight ? 'text-white/60' : 'text-[#888]'}`}>{plan.currency}</span>
+                </div>
+                <p className={`text-sm leading-relaxed mb-6 ${plan.highlight ? 'text-white/60' : 'text-[#888]'}`}>
+                  {plan.description}
+                </p>
+                <div className="h-px bg-[#FFD700]/20 mb-6" />
+                <ul className="space-y-3 mb-8">
+                  {plan.features.map((feature, j) => (
+                    <li key={j} className="flex items-start gap-3">
+                      <CheckCircle className={`w-4 h-4 mt-0.5 shrink-0 ${plan.highlight ? 'text-[#FFD700]' : 'text-[#FFD700]'}`} />
+                      <span className={`text-sm ${plan.highlight ? 'text-white/80' : 'text-[#555]'}`}>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={() => navigateTo('contact')}
+                  className={`w-full py-3.5 text-sm uppercase tracking-wider font-semibold transition-all duration-300 ${
+                    plan.highlight
+                      ? 'bg-[#FFD700] text-[#0A0A0A] hover:bg-[#E6C200]'
+                      : 'bg-[#0A0A0A] text-white hover:bg-[#2A2A2A]'
+                  }`}
+                >
+                  Enroll Now
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ─── ADDITIONAL FEES ────────────────────────── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+          {additionalFees.map((item, i) => (
+            <div key={i} className="flex items-start gap-5 p-6 bg-[#F5F5F5] rounded-xl border border-[#888]/10 hover:border-[#FFD700]/30 transition-all">
+              <div className="w-12 h-12 rounded-full bg-[#FFD700]/10 flex items-center justify-center shrink-0 border border-[#FFD700]/30">
+                <item.icon className="w-5 h-5 text-[#FFD700]" />
+              </div>
+              <div>
+                <div className="flex items-center gap-3 mb-1">
+                  <h4 className="font-bold text-[#0A0A0A]" style={{ fontFamily: "'Playfair Display', serif" }}>{item.label}</h4>
+                  <span className="text-[#FFD700] font-bold text-sm">{item.fee}</span>
+                </div>
+                <p className="text-[#888] text-sm leading-relaxed">{item.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* ─── LOCATION & ACCOMMODATION ───────────────── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="relative overflow-hidden rounded-xl bg-[#0A0A0A] p-8 flex flex-col justify-between min-h-[260px]">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFD700]/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <MapPin className="w-6 h-6 text-[#FFD700]" />
+                <h3 className="text-xl font-bold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>Our Location</h3>
+              </div>
+              <p className="text-white/60 text-sm leading-relaxed mb-2">
+                Diamond Secret Beauty School is conveniently located in <span className="text-[#FFD700] font-semibold">Lapaz, Accra</span> — a vibrant and easily accessible area with excellent transport links, making it simple for students from all across the city to attend classes daily.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 mt-4">
+              <Phone className="w-4 h-4 text-[#FFD700]" />
+              <a href="tel:+233209461260" className="text-[#FFD700] text-sm hover:underline">+233 20 946 1260</a>
+              <span className="text-white/30 mx-2">|</span>
+              <Mail className="w-4 h-4 text-[#FFD700]" />
+              <span className="text-[#FFD700] text-sm">info@diamondsecretbeauty.com</span>
+            </div>
+          </div>
+
+          <div className="relative overflow-hidden rounded-xl bg-[#0A0A0A] p-8 flex flex-col justify-between min-h-[260px]">
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#FFD700]/5 rounded-full translate-y-1/2 -translate-x-1/2" />
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <Home className="w-6 h-6 text-[#FFD700]" />
+                <h3 className="text-xl font-bold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>Hostel Accommodation</h3>
+              </div>
+              <p className="text-white/60 text-sm leading-relaxed mb-2">
+                For students traveling from outside Accra, we offer <span className="text-[#FFD700] font-semibold">comfortable hostel accommodation</span> at an affordable fee. Our hostel provides a safe, convenient, and supportive living environment so you can focus fully on your training without the stress of daily commuting.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 mt-4">
+              <BadgeCheck className="w-4 h-4 text-[#FFD700]" />
+              <span className="text-white/50 text-sm">Safe & Secure Environment</span>
+              <span className="text-white/30 mx-2">|</span>
+              <BadgeCheck className="w-4 h-4 text-[#FFD700]" />
+              <span className="text-white/50 text-sm">Affordable Rates</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+// ─── CTA BANNER ─────────────────────────────────────────
+function CTABanner({ navigateTo }: { navigateTo: (p: Page) => void }) {
+  return (
+    <section className="relative py-20 overflow-hidden">
+      <div className="absolute inset-0 bg-[#FFD700]" />
+      <div className="absolute inset-0 bg-[url('/images/about-salon.jpg')] bg-cover bg-center opacity-10" />
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <Sparkles className="w-10 h-10 text-[#0A0A0A] mx-auto mb-6" />
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#0A0A0A] mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>Your Beauty Career Awaits</h2>
+        <p className="text-[#0A0A0A]/70 text-lg max-w-2xl mx-auto mb-8">Join hundreds of successful graduates who have transformed their passion into a thriving career.</p>
+        <div className="flex flex-wrap justify-center gap-4">
+          <button onClick={() => navigateTo('contact')} className="bg-[#0A0A0A] text-white font-semibold px-8 py-3 text-sm uppercase tracking-wider hover:bg-[#2A2A2A] transition-all">Enroll Now</button>
+          <button onClick={() => document.getElementById('formations')?.scrollIntoView({ behavior: 'smooth' })} className="bg-[#0A0A0A]/10 text-[#0A0A0A] font-semibold px-8 py-3 text-sm uppercase tracking-wider border border-[#0A0A0A]/20 hover:bg-[#0A0A0A]/20 transition-all">View Programs</button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── HOW TO REGISTER ────────────────────────────────────
+function HowToRegisterSection({ navigateTo }: { navigateTo: (p: Page) => void }) {
+  const steps = [
+    { icon: UserCheck, title: 'Choose Your Program', desc: 'Browse our range of professional beauty formations and select the program that aligns with your career goals.' },
+    { icon: FileText, title: 'Submit Your Application', desc: 'Complete our simple online registration form. No prior experience required for beginner programs.' },
+    { icon: CreditCard, title: 'Secure Your Spot', desc: 'Choose from our flexible payment plans to secure your enrollment with installment options.' },
+    { icon: GraduationCap, title: 'Start Your Journey', desc: 'Begin your transformation with hands-on training from industry experts and graduate with certification.' },
+  ];
+  return (
+    <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-[#0A0A0A]">
+      <div className="max-w-7xl mx-auto">
+        <SectionTitle subtitle="Enrollment" title="How to Register" description="Getting started at Diamond Secret Beauty School is simple. Follow these four easy steps to begin your beauty career journey." light />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {steps.map((step, i) => (
+            <div key={i} className="text-center p-6 bg-[#1A1A1A] rounded-lg border border-white/5 hover:border-[#FFD700]/20 transition-all hover:-translate-y-1">
+              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#FFD700]/10 flex items-center justify-center border border-[#FFD700]/30">
+                <step.icon className="w-7 h-7 text-[#FFD700]" />
+              </div>
+              <div className="text-[#FFD700] text-4xl font-bold mb-4 opacity-20" style={{ fontFamily: "'Playfair Display', serif" }}>0{i + 1}</div>
+              <h3 className="text-lg font-bold text-white mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>{step.title}</h3>
+              <p className="text-white/50 text-sm leading-relaxed">{step.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="text-center mt-12">
+          <button onClick={() => navigateTo('contact')} className="bg-[#FFD700] text-[#0A0A0A] font-semibold px-8 py-3 text-sm uppercase tracking-wider hover:bg-[#E6C200] transition-all inline-flex items-center gap-2">
+            Start Your Registration <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── TESTIMONIALS ───────────────────────────────────────
+function TestimonialsSection() {
+  return (
+    <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-[#F5F5F5]">
+      <div className="max-w-7xl mx-auto">
+        <SectionTitle subtitle="Testimonials" title="What Our Students Say" description="Hear from our graduates who have transformed their passion into successful careers in the beauty industry." />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {testimonials.map((t) => (
+            <div key={t.id} className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow relative">
+              <Quote className="w-10 h-10 text-[#FFD700]/20 absolute top-6 right-6" />
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#FFD700]">
+                  <img src={t.image} alt={t.name} className="w-full h-full object-cover" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-[#0A0A0A]" style={{ fontFamily: "'Playfair Display', serif" }}>{t.name}</h4>
+                  <p className="text-[#FFD700] text-xs uppercase tracking-wider">{t.role}</p>
+                </div>
+              </div>
+              <p className="text-[#888] text-sm leading-relaxed mb-4">{t.text}</p>
+              <div className="flex gap-1">{Array.from({ length: 5 }).map((_, i) => <span key={i} className="text-[#FFD700] text-sm">★</span>)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── PARTNERS ───────────────────────────────────────────
+function PartnersSection() {
+  const partners = [
+    { id: 1, name: 'MAC Cosmetics', logo: '💄 MAC' },
+    { id: 2, name: "L'Oréal Professionnel", logo: "✨ L'Oréal" },
+    { id: 3, name: 'OPI Nail Products', logo: '💅 OPI' },
+    { id: 4, name: 'Wella Hair Care', logo: '💇 Wella' },
+    { id: 5, name: 'Dermalogica Skincare', logo: '🧖 Dermalogica' },
+    { id: 6, name: 'Sephora Pro', logo: '🌟 Sephora' },
+    { id: 7, name: 'Schwarzkopf Professional', logo: '✂️ Schwarzkopf' },
+    { id: 8, name: 'CND Nail Systems', logo: '💎 CND' },
+  ];
+  const doubled = [...partners, ...partners];
+  return (
+    <section className="py-12 bg-[#0A0A0A] overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center">
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <div className="h-px w-8 bg-[#FFD700]" />
+          <span className="text-[#FFD700] text-xs uppercase tracking-[0.3em] font-semibold">Partners</span>
+          <div className="h-px w-8 bg-[#FFD700]" />
+        </div>
+        <h2 className="text-2xl md:text-3xl font-bold text-white mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Our Trusted Partners</h2>
+      </div>
+      <div className="relative">
+        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#0A0A0A] to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#0A0A0A] to-transparent z-10" />
+        <div className="partner-scroll flex gap-8 items-center whitespace-nowrap">
+          {doubled.map((p, i) => (
+            <div key={`${p.id}-${i}`} className="flex-shrink-0 px-8 py-4 bg-[#1A1A1A] rounded-lg border border-white/5 hover:border-[#FFD700]/30 transition-colors flex items-center justify-center min-w-[180px]">
+              <span className="text-white/60 text-sm font-medium">{p.logo}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── FAQ ────────────────────────────────────────────────
+function FAQSection() {
+  const [openId, setOpenId] = useState<number | null>(1);
+  return (
+    <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-white">
+      <div className="max-w-7xl mx-auto">
+        <SectionTitle subtitle="FAQ" title="Frequently Asked Questions" description="Find answers to the most common questions about our programs, admissions, and career opportunities." />
+        <div className="max-w-3xl mx-auto space-y-4">
+          {faqItems.map((item) => (
+            <div key={item.id} className={`border rounded-lg transition-all duration-300 ${openId === item.id ? 'border-[#FFD700]/30 bg-[#FFD700]/5 shadow-sm' : 'border-[#888]/10 bg-white hover:border-[#FFD700]/20'}`}>
+              <button onClick={() => setOpenId(openId === item.id ? null : item.id)} className="w-full flex items-center justify-between p-6 text-left">
+                <span className={`font-semibold pr-4 transition-colors ${openId === item.id ? 'text-[#FFD700]' : 'text-[#0A0A0A]'}`} style={{ fontFamily: "'Playfair Display', serif" }}>{item.question}</span>
+                <ChevronDown className={`w-5 h-5 shrink-0 transition-all duration-300 ${openId === item.id ? 'rotate-180 text-[#FFD700]' : 'text-[#888]'}`} />
+              </button>
+              <div className={`overflow-hidden transition-all duration-300 ${openId === item.id ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className="px-6 pb-6 text-[#888] text-sm leading-relaxed">{item.answer}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── FORMATION PAGE ─────────────────────────────────────
+function FormationPage({ slug, navigateTo }: { slug: string; navigateTo: (p: Page) => void }) {
+  const course = getCourseBySlug(slug);
+  if (!course) return <div className="pt-32 text-center"><h2 className="text-2xl font-bold">Course not found</h2><button onClick={() => navigateTo('home')} className="mt-4 text-[#FFD700]">Go Home</button></div>;
+
+  return (
+    <>
+      <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
+        <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/80 via-[#0A0A0A]/60 to-[#0A0A0A]/40" />
+        <div className="absolute inset-0 flex items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-3 mb-4">
+                <button onClick={() => navigateTo('home')} className="text-white/60 hover:text-[#FFD700] text-sm transition-colors">Formations</button>
+                <span className="text-white/30">/</span>
+                <span className="text-[#FFD700] text-sm">{course.title}</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>{course.title}</h1>
+              <p className="text-white/70 text-lg mb-6">{course.subtitle}</p>
+              <div className="flex flex-wrap gap-6">
+                <div className="flex items-center gap-2 text-[#FFD700]"><Clock className="w-4 h-4" /><span className="text-sm font-medium">{course.duration}</span></div>
+                <div className="flex items-center gap-2 text-[#FFD700]"><Award className="w-4 h-4" /><span className="text-sm font-medium">{course.level}</span></div>
+                <div className="flex items-center gap-2 text-[#FFD700]"><Star className="w-4 h-4" /><span className="text-sm font-medium">{course.price}</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="lg:col-span-2 space-y-12">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-[#0A0A0A] mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>About This Program</h2>
+              <p className="text-[#888] leading-relaxed">{course.description}</p>
+            </div>
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-[#0A0A0A] mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>Program Benefits</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {course.benefits.map((b, i) => (
+                  <div key={i} className="flex items-start gap-3 p-4 bg-[#FFD700]/5 rounded-lg">
+                    <CheckCircle className="w-5 h-5 text-[#FFD700] shrink-0 mt-0.5" />
+                    <span className="text-[#0A0A0A] text-sm">{b}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-3 mb-6"><BookOpen className="w-6 h-6 text-[#FFD700]" /><h2 className="text-2xl md:text-3xl font-bold text-[#0A0A0A]" style={{ fontFamily: "'Playfair Display', serif" }}>Curriculum</h2></div>
+              <div className="space-y-3">
+                {course.curriculum.map((item, i) => (
+                  <div key={i} className="flex items-center gap-4 p-4 border border-[#888]/10 rounded-lg hover:border-[#FFD700]/30 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-[#FFD700]/10 flex items-center justify-center shrink-0">
+                      <span className="text-[#FFD700] text-xs font-bold">{String(i + 1).padStart(2, '0')}</span>
+                    </div>
+                    <span className="text-[#0A0A0A] text-sm font-medium">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="lg:col-span-1">
+            <div className="sticky top-28 bg-[#0A0A0A] rounded-lg p-8 text-white">
+              <h3 className="text-xl font-bold text-[#FFD700] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Enroll Now</h3>
+              <p className="text-white/50 text-sm mb-6">Start your journey in {course.title} today</p>
+              <form onSubmit={(e) => { e.preventDefault(); alert('Registration submitted! We will contact you soon.'); }} className="space-y-4">
+                <div>
+                  <label className="block text-white/60 text-xs uppercase tracking-wider mb-2">Full Name</label>
+                  <input type="text" required className="w-full bg-[#1A1A1A] border border-white/10 rounded px-4 py-3 text-white text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-white/30" placeholder="Enter your full name" />
+                </div>
+                <div>
+                  <label className="block text-white/60 text-xs uppercase tracking-wider mb-2">Email</label>
+                  <input type="email" required className="w-full bg-[#1A1A1A] border border-white/10 rounded px-4 py-3 text-white text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-white/30" placeholder="your@email.com" />
+                </div>
+                <div>
+                  <label className="block text-white/60 text-xs uppercase tracking-wider mb-2">Phone Number</label>
+                  <input type="tel" required className="w-full bg-[#1A1A1A] border border-white/10 rounded px-4 py-3 text-white text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-white/30" placeholder="+233 XX XXX XXXX" />
+                </div>
+                <div>
+                  <label className="block text-white/60 text-xs uppercase tracking-wider mb-2">Program</label>
+                  <select className="w-full bg-[#1A1A1A] border border-white/10 rounded px-4 py-3 text-white text-sm focus:border-[#FFD700] focus:outline-none" defaultValue={course.title}>
+                    <option>{course.title}</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-white/60 text-xs uppercase tracking-wider mb-2">Message (Optional)</label>
+                  <textarea rows={3} className="w-full bg-[#1A1A1A] border border-white/10 rounded px-4 py-3 text-white text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-white/30 resize-none" placeholder="Any questions?" />
+                </div>
+                <button type="submit" className="bg-[#FFD700] text-[#0A0A0A] font-semibold px-8 py-3 w-full text-sm uppercase tracking-wider hover:bg-[#E6C200] transition-all inline-flex items-center justify-center gap-2">
+                  Submit Registration <ArrowRight className="w-4 h-4" />
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+// ─── GALLERY PAGE ───────────────────────────────────────
+function GalleryPage() {
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
+  const categories = [
+    { label: 'All', value: 'all' },
+    { label: 'Makeup', value: 'makeup' },
+    { label: 'Nails', value: 'nails' },
+    { label: 'Hair', value: 'hair' },
+    { label: 'Lashes', value: 'lashes' },
+    { label: 'Graduation', value: 'graduation' },
+    { label: 'Classroom', value: 'classroom' },
+  ];
+  const filtered = activeCategory === 'all' ? galleryItems : galleryItems.filter((item) => item.category === activeCategory);
+
+  return (
+    <>
+      <section className="relative h-[40vh] min-h-[300px] overflow-hidden bg-[#0A0A0A] flex items-center justify-center">
+        <div className="absolute inset-0 bg-[url('/images/about-salon.jpg')] bg-cover bg-center opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/80 to-[#0A0A0A]" />
+        <div className="relative z-10 text-center">
+          <div className="flex items-center justify-center gap-3 mb-4"><div className="h-px w-8 bg-[#FFD700]" /><span className="text-[#FFD700] text-xs uppercase tracking-[0.3em] font-semibold">Portfolio</span><div className="h-px w-8 bg-[#FFD700]" /></div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>Our Gallery</h1>
+          <p className="text-white/60 max-w-lg mx-auto">Explore the creativity and talent of our students and graduates.</p>
+        </div>
+      </section>
+      <section className="bg-white border-b border-[#888]/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-wrap justify-center gap-3">
+          {categories.map((cat) => (
+            <button key={cat.value} onClick={() => setActiveCategory(cat.value)} className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === cat.value ? 'bg-[#FFD700] text-[#0A0A0A]' : 'bg-[#F5F5F5] text-[#888] hover:bg-[#FFD700]/10 hover:text-[#FFD700]'}`}>
+              {cat.label}
+            </button>
+          ))}
+        </div>
+      </section>
+      <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-[#F5F5F5]">
+        <div className="max-w-7xl mx-auto">
+          <div className="masonry-grid">
+            {filtered.map((item) => (
+              <div key={item.id} className="masonry-item group cursor-pointer" onClick={() => setSelectedImage(item)}>
+                <div className="relative overflow-hidden rounded-lg">
+                  <img src={item.src} alt={item.alt} className="w-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+                  <div className="absolute inset-0 bg-[#0A0A0A]/0 group-hover:bg-[#0A0A0A]/40 transition-colors duration-300 flex items-center justify-center">
+                    <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-lg font-semibold" style={{ fontFamily: "'Playfair Display', serif" }}>{item.alt}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          {filtered.length === 0 && <div className="text-center py-16"><p className="text-[#888] text-lg">No images found in this category.</p></div>}
+        </div>
+      </section>
+      {selectedImage && (
+        <div className="fixed inset-0 z-50 bg-[#0A0A0A]/95 flex items-center justify-center p-4" onClick={() => setSelectedImage(null)}>
+          <button className="absolute top-6 right-6 text-white/60 hover:text-[#FFD700] transition-colors" onClick={() => setSelectedImage(null)}><XIcon className="w-8 h-8" /></button>
+          <img src={selectedImage.src} alt={selectedImage.alt} className="max-w-full max-h-[85vh] object-contain rounded-lg" onClick={(e) => e.stopPropagation()} />
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-sm">{selectedImage.alt}</div>
+        </div>
+      )}
+    </>
+  );
+}
+
+// ─── CONTACT PAGE ───────────────────────────────────────
+function ContactPage() {
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert('Thank you for your message! We will get back to you shortly.');
+    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  return (
+    <>
+      <section className="relative h-[40vh] min-h-[300px] overflow-hidden bg-[#0A0A0A] flex items-center justify-center">
+        <div className="absolute inset-0 bg-[url('/images/about-salon.jpg')] bg-cover bg-center opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/80 to-[#0A0A0A]" />
+        <div className="relative z-10 text-center">
+          <div className="flex items-center justify-center gap-3 mb-4"><div className="h-px w-8 bg-[#FFD700]" /><span className="text-[#FFD700] text-xs uppercase tracking-[0.3em] font-semibold">Get In Touch</span><div className="h-px w-8 bg-[#FFD700]" /></div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>Contact Us</h1>
+          <p className="text-white/60 max-w-lg mx-auto">Have questions about our programs? We would love to hear from you.</p>
+        </div>
+      </section>
+
+      <section className="bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { icon: MapPin, title: 'Visit Us', info: 'Accra, Ghana', detail: 'Diamond Secret Beauty School' },
+              { icon: Phone, title: 'Call Us', info: '+233 20 946 1260', detail: '+233 54 379 5688' },
+              { icon: Mail, title: 'Email Us', info: 'info@diamondsecretbeauty.com', detail: 'admissions@diamondsecretbeauty.com' },
+              { icon: Clock, title: 'Working Hours', info: 'Mon - Sat: 8AM - 6PM', detail: 'Sunday: Closed' },
+            ].map((item, i) => (
+              <div key={i} className="bg-[#0A0A0A] p-6 rounded-lg text-center hover:-translate-y-1 transition-transform">
+                <item.icon className="w-8 h-8 text-[#FFD700] mx-auto mb-4" />
+                <h3 className="font-bold text-white mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>{item.title}</h3>
+                <p className="text-[#FFD700] text-sm font-medium">{item.info}</p>
+                <p className="text-white/50 text-xs mt-1">{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-[#F5F5F5]">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="bg-white rounded-lg p-8 shadow-sm">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#0A0A0A] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Send Us a Message</h2>
+            <p className="text-[#888] text-sm mb-8">Fill out the form below and our team will get back to you within 24 hours.</p>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-[#0A0A0A] text-xs uppercase tracking-wider mb-2 font-medium">Full Name *</label>
+                  <input type="text" name="name" required value={formData.name} onChange={handleChange} className="w-full border border-[#888]/20 rounded px-4 py-3 text-[#0A0A0A] text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-[#888]/50" placeholder="Your full name" />
+                </div>
+                <div>
+                  <label className="block text-[#0A0A0A] text-xs uppercase tracking-wider mb-2 font-medium">Email *</label>
+                  <input type="email" name="email" required value={formData.email} onChange={handleChange} className="w-full border border-[#888]/20 rounded px-4 py-3 text-[#0A0A0A] text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-[#888]/50" placeholder="your@email.com" />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-[#0A0A0A] text-xs uppercase tracking-wider mb-2 font-medium">Phone</label>
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full border border-[#888]/20 rounded px-4 py-3 text-[#0A0A0A] text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-[#888]/50" placeholder="+233 XX XXX XXXX" />
+                </div>
+                <div>
+                  <label className="block text-[#0A0A0A] text-xs uppercase tracking-wider mb-2 font-medium">Subject *</label>
+                  <select name="subject" required value={formData.subject} onChange={handleChange} className="w-full border border-[#888]/20 rounded px-4 py-3 text-[#0A0A0A] text-sm focus:border-[#FFD700] focus:outline-none">
+                    <option value="">Select a subject</option>
+                    <option value="enrollment">Program Enrollment</option>
+                    <option value="info">General Information</option>
+                    <option value="pricing">Pricing & Payment</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-[#0A0A0A] text-xs uppercase tracking-wider mb-2 font-medium">Message *</label>
+                <textarea name="message" required rows={5} value={formData.message} onChange={handleChange} className="w-full border border-[#888]/20 rounded px-4 py-3 text-[#0A0A0A] text-sm focus:border-[#FFD700] focus:outline-none placeholder:text-[#888]/50 resize-none" placeholder="Tell us how we can help you..." />
+              </div>
+              <button type="submit" className="bg-[#FFD700] text-[#0A0A0A] font-semibold px-8 py-3 text-sm uppercase tracking-wider hover:bg-[#E6C200] transition-all inline-flex items-center gap-2">
+                Send Message <Send className="w-4 h-4" />
+              </button>
+            </form>
+          </div>
+          <div className="space-y-6">
+            <div className="rounded-lg overflow-hidden shadow-sm h-[350px] bg-[#888]/10">
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253682.45932537498!2d-0.3575877!3d5.5912087!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfdf9084b2b7a777%3A0x22e4fbfa3a5a2f3b!2sAccra%2C%20Ghana!5e0!3m2!1sen!2s!4v1700000000000!5m2!1sen!2s" width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Location" />
+            </div>
+            <div className="bg-[#0A0A0A] rounded-lg p-8 flex flex-col sm:flex-row items-center gap-6">
+              <div className="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shrink-0">
+                <MessageCircle className="w-8 h-8 text-white" />
+              </div>
+              <div className="text-center sm:text-left">
+                <h3 className="text-xl font-bold text-white mb-1" style={{ fontFamily: "'Playfair Display', serif" }}>Quick Response via WhatsApp</h3>
+                <p className="text-white/50 text-sm mb-4">Get instant answers directly on WhatsApp</p>
+                <a href="https://wa.me/233209461260?text=Hello%20Diamond%20Secret%20Beauty%20School!" target="_blank" rel="noopener noreferrer" className="bg-[#FFD700] text-[#0A0A0A] font-semibold px-8 py-3 text-sm uppercase tracking-wider hover:bg-[#E6C200] transition-all inline-flex items-center gap-2">
+                  Chat on WhatsApp <ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
