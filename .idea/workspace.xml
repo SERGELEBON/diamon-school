@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c4dd9675-21b4-4579-868f-d7db2b100ca3" name="Changes" comment="" />
+    <list default="true" id="c4dd9675-21b4-4579-868f-d7db2b100ca3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,14 +15,86 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "SERGELEBON"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "git@github.com:SERGELEBON/diamon-school.git",
+    "accountId": "b951046a-f3ef-40d8-8cd5-ba884201e2ed"
+  }
+}]]></component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
   </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.2572137266393775" />
+      <entry key="MS500" value="2.236073664596394" />
+      <entry key="S2" value="2.766245195004328" />
+      <entry key="S5" value="2.9023857559123942" />
+      <entry key="S10" value="2.9504776387458715" />
+      <entry key="S30" value="2.983330729056814" />
+      <entry key="S60" value="2.99164495486341" />
+      <entry key="M2" value="2.995817361219606" />
+      <entry key="M5" value="2.998325714826551" />
+      <entry key="M10" value="2.999162652322006" />
+      <entry key="M15" value="2.9994417226278838" />
+      <entry key="M30" value="2.9997208385178107" />
+      <entry key="H1" value="2.999860413559359" />
+      <entry key="H2" value="2.9999302053547288" />
+      <entry key="H4" value="2.9999651023211187" />
+      <entry key="D1" value="2.999994183670707" />
+      <entry key="W1" value="2.999999169094604" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="1.0809362795209392" />
+      <entry key="MS500" value="2.1705695258058273" />
+      <entry key="S2" value="2.7458414226556154" />
+      <entry key="S5" value="2.893810348146042" />
+      <entry key="S10" value="2.9461168094260928" />
+      <entry key="S30" value="2.981860465640986" />
+      <entry key="S60" value="2.9909077157166735" />
+      <entry key="M2" value="2.995448212837003" />
+      <entry key="M5" value="2.9981779283089285" />
+      <entry key="M10" value="2.9990887378482003" />
+      <entry key="M15" value="2.9993924415960205" />
+      <entry key="M30" value="2.9996961956434953" />
+      <entry key="H1" value="2.9998480915325323" />
+      <entry key="H2" value="2.9999240441938895" />
+      <entry key="H4" value="2.999962021703841" />
+      <entry key="D1" value="2.999993670229375" />
+      <entry key="W1" value="2.9999990957457165" />
+    </decayedShown>
+  </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
+    "node.js.selected.package.tslint": "(autodetect)",
     "ts.external.directory.path": "/home/serge/Téléchargements/diamon1/node_modules/typescript/lib"
   }
 }]]></component>
